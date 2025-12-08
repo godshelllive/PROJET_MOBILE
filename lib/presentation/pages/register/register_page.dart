@@ -31,21 +31,23 @@ class RegisterPage extends GetView<RegisterController> {
                   style: TextStyle(fontSize: 14, color: Colors.black54),
                 ),
                 const SizedBox(height: 24),
-                Obx(() => Row(
-                      children: [
-                        _Segment(
-                          label: 'Se connecter',
-                          selected: controller.isLogin.value,
-                          onTap: () => controller.isLogin.value = true,
-                        ),
-                        const SizedBox(width: 8),
-                        _Segment(
-                          label: "S'inscrire",
-                          selected: !controller.isLogin.value,
-                          onTap: () => controller.isLogin.value = false,
-                        ),
-                      ],
-                    )),
+                Obx(
+                  () => Row(
+                    children: [
+                      _Segment(
+                        label: 'Se connecter',
+                        selected: controller.isLogin.value,
+                        onTap: () => controller.isLogin.value = true,
+                      ),
+                      const SizedBox(width: 8),
+                      _Segment(
+                        label: "S'inscrire",
+                        selected: !controller.isLogin.value,
+                        onTap: () => controller.isLogin.value = false,
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 24),
                 Form(
                   key: controller.formKey,
@@ -70,54 +72,70 @@ class RegisterPage extends GetView<RegisterController> {
                         ),
                         validator: controller.validatePassword,
                       ),
-                      Obx(() => controller.isLogin.value
-                          ? const SizedBox.shrink()
-                          : Column(
-                              children: [
-                                const SizedBox(height: 16),
-                                TextFormField(
-                                  controller: controller.confirmPasswordController,
-                                  obscureText: true,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Confirmer le mot de passe',
-                                    border: OutlineInputBorder(),
+                      Obx(
+                        () => controller.isLogin.value
+                            ? const SizedBox.shrink()
+                            : Column(
+                                children: [
+                                  const SizedBox(height: 16),
+                                  TextFormField(
+                                    controller:
+                                        controller.confirmPasswordController,
+                                    obscureText: true,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Confirmer le mot de passe',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    validator: controller.validateConfirm,
                                   ),
-                                  validator: controller.validateConfirm,
-                                ),
-                              ],
-                            )),
+                                ],
+                              ),
+                      ),
                       const SizedBox(height: 12),
-                      Obx(() => controller.isLogin.value
-                          ? Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () {},
-                                child: const Text('Mot de passe oublié ?'),
-                              ),
-                            )
-                          : const SizedBox.shrink()),
-                      const SizedBox(height: 8),
-                      Obx(() => SizedBox(
-                            width: double.infinity,
-                            height: 52,
-                            child: ElevatedButton(
-                              onPressed: controller.loading.value ? null : controller.submit,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                      Obx(
+                        () => controller.isLogin.value
+                            ? Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () {},
+                                  child: const Text('Mot de passe oublié ?'),
                                 ),
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+                      const SizedBox(height: 8),
+                      Obx(
+                        () => SizedBox(
+                          width: double.infinity,
+                          height: 52,
+                          child: ElevatedButton(
+                            onPressed: controller.loading.value
+                                ? null
+                                : controller.submit,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              child: controller.loading.value
-                                  ? const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                                    )
-                                  : Text(controller.isLogin.value ? 'Se connecter' : "Créer mon compte"),
                             ),
-                          )),
+                            child: controller.loading.value
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    controller.isLogin.value
+                                        ? 'Se connecter'
+                                        : "Créer mon compte",
+                                  ),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       const Text(
                         "En continuant, vous acceptez nos Conditions générales et notre Politique de confidentialité.",
@@ -140,7 +158,11 @@ class _Segment extends StatelessWidget {
   final String label;
   final bool selected;
   final VoidCallback onTap;
-  const _Segment({required this.label, required this.selected, required this.onTap});
+  const _Segment({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
     "name": "code_initial",
     "short_name": "code_initial",
+=======
+    "name": "class_project",
+    "short_name": "class_project",
+>>>>>>> 124b9432c76d5c7e4ff68a3cdc69d6e7be42c8a9
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
