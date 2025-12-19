@@ -29,13 +29,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           child: Column(
             children: [
-              Center(
-                child: Image.asset(
-                  'assets/images/vestigo_logo.png',
-                  height: 120,
+              SizedBox(
+                height: 120,
+                child: Center(
+                  child: Transform.scale(
+                    scale: 1.0,
+                    child: Image.asset(
+                      'assets/images/vestigo_logo.png',
+                      height: 120,
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(height: 16),
               Expanded(
                 child: PageView(
                   controller: _pageController,

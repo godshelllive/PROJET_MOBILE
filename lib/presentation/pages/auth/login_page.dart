@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:code_initial/data/repositories/user_repository.dart';
 import 'package:code_initial/navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -70,16 +71,29 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Image.asset(
-                    'assets/images/vestigo_logo.png',
-                    height: 120,
+                SizedBox(
+                  height: 120,
+                  child: Center(
+                    child: Transform.scale(
+                      scale: 1.0,
+                      child: Image.asset(
+                        'assets/images/vestigo_logo.png',
+                        height: 120,
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Bonjour,\nConnectez-vous.',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                const SizedBox(height: 75),
+                Center(
+                  child: const Text(
+                    'Bonjour,\nConnectez-vous.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF0D47A1),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -169,7 +183,13 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.snackbar(
+                            'Indisponible',
+                            'Fonctionnalité non encore prête',
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFF6A00),
                           foregroundColor: Colors.white,
@@ -183,7 +203,13 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.snackbar(
+                            'Indisponible',
+                            'Fonctionnalité non encore prête',
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0D47A1),
                           foregroundColor: Colors.white,

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vestigo — Guide Technique</title>
+  <style>
+    :root {
+      --bg: #0b0e12;
+      --card: #12161c;
+      --muted: #8aa0b4;
+      --text: #e6edf3;
+      --accent: #4f9cf6;
+      --accent-2: #7c4dff;
+      --ok: #34c759;
+      --warn: #ffb300;
+      --danger: #ff5252;
+      --code-bg: #0f1318;
+      --border: #1f2a36;
+    }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 20px 64px;
+    }
+    .title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 0.1px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.3px;
+    }
+    .section {
+      margin-top: 26px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 18px 8px;
+    }
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .section h3 {
+      margin: 18px 0 8px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    p { margin: 8px 0; }
+    ul { margin: 8px 0 6px 20px; }
+    li { margin: 2px 0; }
+    code, kbd { background: var(--code-bg); color: #d6e2f2; padding: 0 6px; border-radius: 6px; }
+    pre { background: var(--code-bg); padding: 12px; border-radius: 10px; overflow: auto; border: 1px solid var(--border); }
+    .kv { display: grid; grid-template-columns: 220px 1fr; gap: 6px 16px; align-items: start; }
+    .kv div.key { color: var(--muted); }
+    .ref { color: var(--accent); font-weight: 700; }
+    .muted { color: var(--muted); }
+    .ok { color: var(--ok); font-weight: 700; }
+    .warn { color: var(--warn); font-weight: 700; }
+    .danger { color: var(--danger); font-weight: 700; }
+    .toc { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 20px; }
+    .pill { background: #0e1420; border: 1px solid var(--border); padding: 6px 10px; border-radius: 999px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+  <meta name="description" content="Documentation technique détaillée du projet Flutter Vestigo: architecture, base de données, routage GetX, persistance locale, UI et procédures de build." />
+</head>
+<body>
+  <div class="container">
+    <div class="title">Vestigo — Guide Technique <span class="badge">Flutter</span></div>
+
+    <div class="section">
+      <h2>Résumé</h2>
+      <p>Application Flutter présentant des collections de vêtements avec <b>authentification</b>, <b>favoris</b>, <b>panier</b> et <b>profil</b>. Navigation via <code>GetX</code>, persistance locale via <code>SQLite</code> et <code>SharedPreferences</code>.</p>
+      <div class="kv">
+        <div class="key">Langage</div><div>Dart (Flutter)</div>
+        <div class="key">State</div><div><code>setState</code> + logique locale par page</div>
+        <div class="key">Navigation</div><div><code>get</code> (GetX) — <span class="ref">lib/navigation.dart:14–40,43–59</span></div>
+        <div class="key">Persistance</div><div><code>sqflite</code> + <code>shared_preferences</code></div>
+        <div class="key">Point d’entrée</div><div><span class="ref">lib/main.dart:9–14</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Packages Principaux</h2>
+      <ul>
+        <li><b>GetX</b> (<code>get</code>): navigation, routes, snackbars — <span class="ref">lib/navigation.dart:14–40</span></li>
+        <li><b>Sqflite</b>: base SQLite locale — <span class="ref">lib/data/local/database.dart:1,7–13,60–67</span></li>
+        <li><b>path</b>: construction du chemin DB — <span class="ref">lib/data/local/database.dart:2,8–10</span></li>
+        <li><b>SharedPreferences</b>: session utilisateur — <span class="ref">lib/presentation/pages/splashscreen/splash_screen_page.dart:28–31</span>, <span class="ref">lib/presentation/pages/auth/login_page.dart:35–45</span></li>
+        <li><b>another_flutter_splash_screen</b>: écran d’accueil animé — <span class="ref">lib/presentation/pages/splashscreen/splash_screen_page.dart:21–55</span></li>
+        <li><b>google_fonts</b>: typographies — <span class="ref">lib/main.dart:3,64–65</span></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Base de Données</h2>
+      <h3>Initialisation</h3>
+      <p>L’application initialise la base avant le démarrage de l’UI.</p>
+      <ul>
+        <li>Entrée: <span class="ref">lib/main.dart:9–14</span></li>
+        <li>Routine: <code>AppDatabase.init()</code> — <span class="ref">lib/data/local/database.dart:7–13</span></li>
+      </ul>
+      <h3>Schéma</h3>
+      <ul>
+        <li><code>users</code>: id, first_name, last_name, phone, email (unique), password_hash, created_at — <span class="ref">lib/data/local/database.dart:14–35</span></li>
+        <li><code>favorites</code>: product_id (PK)</li>
+        <li><code>cart</code>: product_id (PK), quantity</li>
+      </ul>
+      <h3>Migrations</h3>
+      <ul>
+        <li>Tables <code>favorites</code>/<code>cart</code> si <code>oldVersion &lt; 2</code></li>
+        <li>Ajout de <code>created_at</code> dans <code>users</code> si <code>oldVersion &lt; 3</code> — <span class="ref">lib/data/local/database.dart:37–55</span></li>
+      </ul>
+      <h3>Accès Sécurisé</h3>
+      <p>Le getter <code>AppDatabase.db</code> lève une erreur si la base n’est pas prête — <span class="ref">lib/data/local/database.dart:60–67</span>.</p>
+    </div>
+
+    <div class="section">
+      <h2>Utilisateur & Sécurité</h2>
+      <h3>Repository</h3>
+      <ul>
+        <li>Hash mot de passe <b>SHA‑256</b> — <span class="ref">lib/data/repositories/user_repository.dart:1–13</span></li>
+        <li>Inscription: unicité email, insertion avec <code>password_hash</code> et <code>created_at</code> — <span class="ref">lib/data/repositories/user_repository.dart:15–39</span></li>
+        <li>Connexion: sélection par <code>email + password_hash</code> — <span class="ref">lib/data/repositories/user_repository.dart:41–54</span></li>
+        <li>Mise à jour profil: méthodes de lecture/écriture par email — <span class="ref">lib/data/repositories/user_repository.dart:56–80</span></li>
+      </ul>
+      <h3>Session</h3>
+      <ul>
+        <li>Écriture de session dans <code>SharedPreferences</code> au login/signup — <span class="ref">lib/presentation/pages/auth/login_page.dart:35–45</span>, <span class="ref">lib/presentation/pages/auth/signup_page.dart:44–55</span></li>
+        <li>Contrôle au splash puis redirection — <span class="ref">lib/presentation/pages/splashscreen/splash_screen_page.dart:28–31</span></li>
+        <li>Déconnexion depuis la Home: purge <code>email</code> et <code>loggedIn</code> puis route onboarding — <span class="ref">lib/presentation/pages/home/home_page.dart:724–737</span></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>UI & Mise à Jour</h2>
+      <ul>
+        <li>Home: filtres et recomputation — <span class="ref">lib/presentation/pages/home/home_page.dart:200–240</span></li>
+        <li>Favoris: <code>_favIds</code> (mémoire) + persistance SQLite — <span class="ref">lib/presentation/pages/home/home_page.dart:404–412,1194–1200</span></li>
+        <li>Panier: <code>_cartQty</code> (mémoire) + persistance — <span class="ref">lib/presentation/pages/home/home_page.dart:375–389,391–404,414–424</span></li>
+        <li>Affichage panier (items + quantités) — <span class="ref">lib/presentation/pages/home/home_page.dart:1528–1608</span></li>
+        <li>Carte produit: note, prix, badge stock, icônes — <span class="ref">lib/presentation/pages/home/home_page.dart:1870–2131</span></li>
+        <li>Listes horizontales Homme/Femme — <span class="ref">lib/presentation/pages/home/home_page.dart:1260–1301,1354–1405</span></li>
+      </ul>
+      <p class="muted">Note: Les animations de particules ont été <b>retirées</b> selon la demande.</p>
+    </div>
+
+    <div class="section">
+      <h2>Thème & Pages</h2>
+      <ul>
+        <li>Thème global (typographies, couleurs, locales) — <span class="ref">lib/main.dart:25–66</span></li>
+        <li>Onboarding: slides, icônes, CTA login/signup — <span class="ref">lib/presentation/pages/onboarding/onboarding_page.dart:24–68,100–135</span></li>
+        <li>Édition de profil: interface modernisée — <span class="ref">lib/presentation/pages/profile/edit_profile_page.dart:1–20</span></li>
+        <li>Register/Login: contrôle via GetX et formulaires — <span class="ref">lib/presentation/pages/register/register_page.dart:1–60</span>, <span class="ref">lib/presentation/pages/auth/login_page.dart:1–40</span></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Flux Clés</h2>
+      <h3>Authentification</h3>
+      <ol>
+        <li>Signup: insertion en DB (hash) — <span class="ref">lib/data/repositories/user_repository.dart:15–39</span></li>
+        <li>Login: vérification du hash — <span class="ref">lib/data/repositories/user_repository.dart:41–54</span></li>
+        <li>Session: enregistrement dans <code>SharedPreferences</code> — <span class="ref">lib/presentation/pages/auth/login_page.dart:35–45</span></li>
+        <li>Splash: routage <code>HOME</code> si connecté — <span class="ref">lib/presentation/pages/splashscreen/splash_screen_page.dart:28–31</span></li>
+      </ol>
+      <h3>Favoris</h3>
+      <ol>
+        <li>Tap cœur: toggle en mémoire</li>
+        <li>Persistance immédiate en SQLite</li>
+        <li><code>setState</code> + recomputation — <span class="ref">lib/presentation/pages/home/home_page.dart:404–424</span></li>
+      </ol>
+      <h3>Panier</h3>
+      <ol>
+        <li>Tap panier: incrément en mémoire</li>
+        <li>Écriture en SQLite</li>
+        <li>Affichage listé depuis <code>_cartQty</code> — <span class="ref">lib/presentation/pages/home/home_page.dart:1528–1608</span></li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>Build & Release (APK)</h2>
+      <p>Procédure utilisée pour générer la <b>dernière APK release</b> et la placer à la racine du projet.</p>
+      <ul>
+        <li>Commande: <code>flutter build apk --release</code></li>
+        <li>APK standard: <code>android/app/build/outputs/apk/release/app-release.apk</code></li>
+        <li>Copie finale: <code>app-release.apk</code> à la racine du projet</li>
+      </ul>
+      <p class="muted">Pré-requis: <code>flutter pub get</code>, SDK Android et clés de signature si personnalisées.</p>
+    </div>
+
+    <div class="section">
+      <h2>Questions Fréquentes</h2>
+      <ul>
+        <li><b>Où est initialisée la DB ?</b> — <span class="ref">lib/main.dart:9–14</span>, <span class="ref">lib/data/local/database.dart:7–13</span></li>
+        <li><b>Comment est gérée la session ?</b> — <span class="ref">lib/presentation/pages/splashscreen/splash_screen_page.dart:28–31</span></li>
+        <li><b>Où sont les favoris/panier ?</b> — tables SQLite + état mémoire — <span class="ref">lib/presentation/pages/home/home_page.dart:375–424</span></li>
+        <li><b>Comment fonctionne le routage ?</b> — <span class="ref">lib/navigation.dart:14–40,43–59</span></li>
+        <li><b>Y a‑t‑il des confettis ?</b> — Non, retirés à votre demande.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Points d’Attention</h2>
+      <ul>
+        <li>Appeler <code>AppDatabase.init()</code> avant tout accès DB.</li>
+        <li>Les IDs produit sont dérivés des chemins d’assets (utilisés comme clés) — <span class="ref">lib/presentation/pages/home/home_page.dart:375–389</span></li>
+        <li>GetX centralise les routes; ne pas router manuellement sans passer par <code>Routes</code> — <span class="ref">lib/navigation.dart:42–59</span></li>
+        <li>Éviter de bloquer l’UI lors des requêtes; privilégier les futures asynchrones.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Références Rapides</h2>
+      <ul>
+        <li>Initialisation DB — <span class="ref">lib/main.dart:9–14</span></li>
+        <li>Schéma DB — <span class="ref">lib/data/local/database.dart:14–35</span></li>
+        <li>Requêtes utilisateur — <span class="ref">lib/data/repositories/user_repository.dart:22–39,41–54</span></li>
+        <li>Persistance favoris/panier — <span class="ref">lib/presentation/pages/home/home_page.dart:404–424</span></li>
+        <li>Splash routing — <span class="ref">lib/presentation/pages/splashscreen/splash_screen_page.dart:28–31</span></li>
+      </ul>
+    </div>
+
+    <p class="muted">© Vestigo — Ce document est destiné à la présentation technique du projet.</p>
+  </div>
+</body>
+</html>
+

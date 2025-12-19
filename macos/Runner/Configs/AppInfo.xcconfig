@@ -5,17 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-<<<<<<< HEAD
-PRODUCT_NAME = code_initial
+PRODUCT_NAME = Vestigo
 
 // The application's bundle identifier
 PRODUCT_BUNDLE_IDENTIFIER = com.example.codeInitial
-=======
-PRODUCT_NAME = class_project
-
-// The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.classProject
->>>>>>> 124b9432c76d5c7e4ff68a3cdc69d6e7be42c8a9
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2025 com.example. All rights reserved.

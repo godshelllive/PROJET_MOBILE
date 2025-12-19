@@ -7,6 +7,8 @@ import 'package:code_initial/presentation/pages/auth/login_page.dart';
 import 'package:code_initial/presentation/pages/auth/signup_page.dart';
 import 'package:code_initial/presentation/pages/splashscreen/splash_screen_page.dart';
 import 'package:code_initial/presentation/pages/home/home_page.dart';
+import 'package:code_initial/presentation/pages/checkout/checkout_page.dart';
+import 'package:code_initial/presentation/pages/profile/edit_profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Nav {
@@ -33,14 +35,15 @@ class Nav {
       binding: OnboardingBinding(),
     ),
     GetPage(name: Routes.HOME, page: () => const HomePage()),
+    GetPage(name: Routes.CHECKOUT, page: () => const CheckoutPage()),
+    GetPage(name: Routes.PROFILE_EDIT, page: () => const EditProfilePage()),
   ];
 }
 
 class Routes {
   static Future<String> get initialRoute async {
-    final prefs = await SharedPreferences.getInstance();
-    final loggedIn = prefs.getBool('loggedIn') ?? false;
-    return loggedIn ? HOME : SPLASH;
+    // Toujours afficher le Splash au démarrage; le routing post-splash gère HOME/ONBOARDING
+    return SPLASH;
   }
 
   static const String MAIN = "/";
@@ -51,4 +54,6 @@ class Routes {
   static const ONBOARDING = '/onboarding';
   static const SPLASH = '/splash';
   static const HOME = '/home';
+  static const CHECKOUT = '/checkout';
+  static const PROFILE_EDIT = '/profile/edit';
 }

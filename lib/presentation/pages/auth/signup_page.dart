@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:code_initial/data/repositories/user_repository.dart';
 import 'package:code_initial/navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -74,9 +75,29 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Inscription',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                SizedBox(
+                  height: 120,
+                  child: Center(
+                    child: Transform.scale(
+                      scale: 1.0,
+                      child: Image.asset(
+                        'assets/images/vestigo_logo.png',
+                        height: 120,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Center(
+                  child: const Text(
+                    'Inscription',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF0D47A1),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 TextFormField(
@@ -228,7 +249,13 @@ class _SignupPageState extends State<SignupPage> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.snackbar(
+                            'Indisponible',
+                            'Fonctionnalité non encore prête',
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFF6A00),
                           foregroundColor: Colors.white,
@@ -242,7 +269,13 @@ class _SignupPageState extends State<SignupPage> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.snackbar(
+                            'Indisponible',
+                            'Fonctionnalité non encore prête',
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0D47A1),
                           foregroundColor: Colors.white,
