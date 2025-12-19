@@ -1,6 +1,15 @@
-# PROJET_MOBILE
+## VESTIGO Collections
 
-Projet Flutter mobile. Ce dépôt contient une application Flutter prête à être exécutée sur un émulateur Android.
+## Membres / collaborators
+AKOUTEY Joseph - Godshelllive_brach/Godshell_brach
+ZANNOU Dieudonné - janvier_dieu_donne
+
+## Taches personnelle des membres
+`AKOUTEY Joseph` s'est chargé de l'intégration des pages fournies par Dieu-donnée et Elie-msh et des l'intégration de la base de donnée sqflite de l'application et sur les pages fournies par Dieu-donnée et Elie-msh. Il s'est chargé de l'initialisation du projet et de la mise en place de la barre de navigation et son fonctionnement. S'est chargé de la creation de la page favoris sur la base de la creation de la page home par Dieu donné 
+
+`Dieu-donnée` s'est chargé de la creation entière du visuel (partie front du code et positionnement des elements, forme et style: couleur, border, police, etc) des pages `panier`, `home`, `profil`.
+
+`Elie-msh` s'est chargé de la creation entière du visuel d'onboarding et splash screen.
 
 ## Description
 Ce projet consiste à développer une application mobile de vente de vêtements en Flutter, utilisant GetX pour une architecture modulaire et une base SQflite embarquée pour garantir un fonctionnement autonome sans serveur externe. L’application, versionnée avec Git et enrichie d’API pour des fonctions avancées comme le paiement, offre une expérience complète couvrant tout le parcours utilisateur, du catalogue jusqu’à la gestion des commandes. Le détail des fonctionnalités et des contraintes est décrit dans `documents/Cahier des charges app-mobile.docx`.
